@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ofertas</title>
+  <link rel="stylesheet" href="./css/offers.css" />
+  <!-- Iconos de Font Awesome (para el ícono de WhatsApp) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="offers-header">
+    <a href="./select.html" class="back-button">←</a>
+    <h2>OFERTAS</h2>
+  </div>
+
+  <div class="offers-container">
+    <!-- Oferta 1 -->
+    <div class="offer-card">
+      <img src="./img/camisa.png" alt="Camisa Básica">
+      <div class="offer-info">
+        <h3>Promo Camisa Básica</h3>
+        <p>Llévate la segunda al 50% de descuento.</p>
+        <div class="price-row">
+          <!-- data-price en COP (sin puntos ni comas) -->
+          <span class="price" data-price="45000">$45.000</span>
+          <div class="qty">
+            <button class="menos" data-id="offer_camisa">−</button>
+            <span id="cant_offer_camisa">0</span>
+            <button class="mas" data-id="offer_camisa">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Oferta 2 -->
+    <div class="offer-card">
+      <img src="./img/jean.png" alt="Jean Clásico">
+      <div class="offer-info">
+        <h3>Promo Jean Clásico</h3>
+        <p>¡2x1 en jeans seleccionados!</p>
+        <div class="price-row">
+          <span class="price" data-price="75000">$75.000</span>
+          <div class="qty">
+            <button class="menos" data-id="offer_jean">−</button>
+            <span id="cant_offer_jean">0</span>
+            <button class="mas" data-id="offer_jean">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <div class="cart-footer">
+    <span id="total-price">$0</span>
+    <button class="pay">Realizar Pedido <i class="fa-brands fa-whatsapp"></i></button>
+  </div>
+
+  <!-- Script -->
+  <script src="./js/offers.js"></script>
+</body>
+</html>
