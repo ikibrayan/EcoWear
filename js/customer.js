@@ -34,7 +34,8 @@ function finalizarPedido() {
 
   if (!esOferta) {
     pedido.resumen.forEach(item => {
-      mensaje += `• ${item.nombre} x${item.cantidad} – ${formatoCOP.format(item.subtotal)}\n`;
+      // 👇 Ahora mostramos también la talla
+      mensaje += `• ${item.nombre} (Talla: ${item.talla || "M"}) x${item.cantidad} – ${formatoCOP.format(item.subtotal)}\n`;
     });
 
     mensaje += `\nTotal: ${formatoCOP.format(pedido.total)}\n`;

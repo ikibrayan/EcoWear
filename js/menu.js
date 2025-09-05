@@ -109,7 +109,7 @@ const productos = [
 // =============================
 let productosFiltrados = [...productos];
 
-// Carrito: clave = índice del producto, valor = cantidad
+// Carrito: clave = índice del producto, valor = { cantidad, talla }
 let carrito = {};
 
 // =============================
@@ -134,7 +134,9 @@ if (pedidoGuardado) {
   const pedido = JSON.parse(pedidoGuardado);
   pedido.resumen.forEach(item => {
     const index = productos.findIndex(p => p.nombre === item.nombre);
-    if (index !== -1) carrito[index] = item.cantidad;
+    if (index !== -1) {
+      carrito[index] = { cantidad: item.cantidad, talla: item.talla || "M" };
+    }
   });
 }
 
@@ -147,7 +149,8 @@ function renderCarrito() {
 
   productosFiltrados.forEach((producto) => {
     const index = productos.indexOf(producto);
-    const cantidad = carrito[index] || 0;
+    const cantidad = carrito[index]?.cantidad || 0;
+    const talla = carrito[index]?.talla || "M";
 
     const item = document.createElement('div');
     item.className = 'cart-item';
@@ -156,6 +159,16 @@ function renderCarrito() {
       <div class="info">
         <h3>${producto.nombre}</h3>
         <p>${producto.descripcion}</p>
+
+        <!-- Selector de tallas -->
+        <label class="label-talla" for="talla_${index}">Talla:</label>
+        <select id="talla_${index}" class="talla-select" data-id="${index}">
+          <option value="S" ${talla === "S" ? "selected" : ""}>S</option>
+          <option value="M" ${talla === "M" ? "selected" : ""}>M</option>
+          <option value="L" ${talla === "L" ? "selected" : ""}>L</option>
+          <option value="XL" ${talla === "XL" ? "selected" : ""}>XL</option>
+        </select>
+
         <div class="bottom">
           <span>${formatoCOP.format(producto.precio)}</span>
           <div class="qty">
@@ -178,6 +191,16 @@ function renderCarrito() {
     btn.addEventListener('click', () => cambiarCantidad(parseInt(btn.dataset.id), -1));
   });
 
+  // Asignar eventos a los selects de talla
+  document.querySelectorAll('.talla-select').forEach(select => {
+    select.addEventListener('change', () => {
+      const index = parseInt(select.dataset.id, 10);
+      if (!carrito[index]) carrito[index] = { cantidad: 0, talla: "M" };
+      carrito[index].talla = select.value;
+      actualizarTotal();
+    });
+  });
+
   actualizarTotal();
 }
 
@@ -185,8 +208,12 @@ function renderCarrito() {
 // Cambiar cantidad
 // =============================
 function cambiarCantidad(index, delta) {
-  carrito[index] = Math.max(0, (carrito[index] || 0) + delta);
-  document.getElementById(`cant_${index}`).textContent = carrito[index];
+  if (!carrito[index]) carrito[index] = { cantidad: 0, talla: "M" };
+
+  carrito[index].cantidad = Math.max(0, (carrito[index].cantidad || 0) + delta);
+
+  document.getElementById(`cant_${index}`).textContent = carrito[index].cantidad;
+
   actualizarTotal();
 }
 
@@ -196,9 +223,10 @@ function cambiarCantidad(index, delta) {
 function actualizarTotal() {
   let total = 0;
   for (const i in carrito) {
-    const index = parseInt(i, 10); // 👈 convertir clave a número
-    if (productos[index]) {
-      total += productos[index].precio * carrito[i];
+    const index = parseInt(i, 10);
+    const item = carrito[i];
+    if (productos[index] && item.cantidad > 0) {
+      total += productos[index].precio * item.cantidad;
     }
   }
 
@@ -236,13 +264,15 @@ document.querySelector('.pay').addEventListener('click', () => {
   for (const i in carrito) {
     const index = parseInt(i, 10);
     const producto = productos[index];
-    const cantidad = carrito[i];
-    if (producto && cantidad > 0) {
-      const subtotal = producto.precio * cantidad;
+    const item = carrito[i];
+
+    if (producto && item.cantidad > 0) {
+      const subtotal = producto.precio * item.cantidad;
 
       resumen.push({
         nombre: producto.nombre,
-        cantidad,
+        cantidad: item.cantidad,
+        talla: item.talla,   // 👈 ahora incluimos la talla
         subtotal
       });
 

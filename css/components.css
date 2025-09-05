@@ -41,13 +41,28 @@ body {
 .categorias-container {
   display: flex;
   gap: 12px;
-  overflow-x: auto;
+  overflow-x: auto;                /* permite desplazamiento horizontal */
   padding: 16px;
   background-image: url(../img/background.webp);
-  justify-content: center;
+  scroll-behavior: smooth;         /* scroll suave */
+  -webkit-overflow-scrolling: touch; /* mejor experiencia en móviles */
+}
+
+.categorias-container::-webkit-scrollbar {
+  height: 6px;                     /* barra de scroll finita */
+}
+
+.categorias-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.categorias-container::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .categoria-btn {
+  flex: 0 0 auto;                  /* evita que los botones se encojan */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,20 +93,26 @@ body {
   text-align: center;
 }
 
+/* Efecto hover */
+.categoria-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
 /* Activo */
 .categoria-btn.active {
   background-color: green;
-  color: #2a2f47;
-  box-shadow: 0 0 10px rgba(255, 213, 79, 0.6);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 128, 0, 0.5);
   transform: scale(1.05);
 }
 
 .categoria-btn.active span {
-  color: #2a2f47;
+  color: #fff;
 }
 
 .categoria-btn.active img {
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+  filter: brightness(0) invert(1); /* icono blanco cuando está activo */
 }
 
 /* Items */
@@ -147,6 +168,37 @@ body {
   align-items: center;
   margin-top: 8px;
 }
+
+.talla-select {
+  padding: 6px 10px;
+  margin-top: 6px;
+  border: 2px solid #28a745;   /* verde similar al botón de + */
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.label-talla {
+  font-weight: bold;
+}
+
+/* Efecto hover */
+.talla-select:hover {
+  border-color: #1e7e34;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.4);
+}
+
+/* Cuando el select está enfocado */
+.talla-select:focus {
+  outline: none;
+  border-color: #1e7e34;
+  box-shadow: 0 0 6px rgba(40, 167, 69, 0.6);
+}
+
 
 .bottom span {
   font-weight: bold;
@@ -253,12 +305,6 @@ body {
     justify-content: space-between;
   }
 
-  .info {
-    height: auto;     /* 👈 quitar altura fija en PC */
-    /* 👈 opcional: asegura equilibrio visual */
-  }
 
-  .bottom {
-    margin-top: auto;     /* 👈 empuja precio+botones hacia abajo */
-  }
+
 }
